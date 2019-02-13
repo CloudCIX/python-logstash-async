@@ -107,11 +107,13 @@ class TcpTransport(UdpTransport):
             return
 
         # from logging.handlers.SocketHandler
-        sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         if self._timeout is not TimeoutNotSet:
+            sock = socket.create_connection((self._host, self._port), self._timeout)
             sock.settimeout(self._timeout)
+        else:
+            sock = socket.create_connection((self._host, self._port))
 
-        sock.connect((self._host, self._port))
+        # sock.connect((self._host, self._port))
         # non-SSL
         if not self._ssl_enable:
             self._sock = sock
